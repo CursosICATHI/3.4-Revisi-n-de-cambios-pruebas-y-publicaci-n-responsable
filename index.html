@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Revisión de cambios, pruebas y publicación responsable</title>
+<style>
+
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap');
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Montserrat', sans-serif; background: #f0f2f5; color: #333; }
+    .slide { width: 100%; max-width: 1024px; margin: 20px auto; background: #fff; border-radius: 20px; box-shadow: 0 8px 30px rgba(0,0,0,0.12); overflow: hidden; min-height: 500px; display: flex; flex-direction: column; }
+    .slide-header { background: #3d5a96; padding: 18px 30px; display: flex; align-items: center; justify-content: space-between; }
+    .slide-header h2 { color: #fff; font-size: 20px; font-weight: 700; }
+    .slide-header .num { color: rgba(255,255,255,0.6); font-size: 14px; }
+    .slide-body { padding: 30px; flex: 1; }
+    .slide-footer { background: #2e4575; padding: 10px 30px; display: flex; justify-content: space-between; color: rgba(255,255,255,0.7); font-size: 12px; }
+    .portada { min-height: 90vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; position: relative; overflow: hidden; }
+    .portada-bg { position: absolute; inset: 0; background: linear-gradient(135deg, #3d5a96 0%, #e8755c 50%, #d05a7e 100%); z-index: 0; }
+    .portada .franja1 { position: absolute; bottom: 0; left: 0; right: 0; height: 12px; background: #e8755c; z-index: 1; }
+    .portada .franja2 { position: absolute; top: 0; right: 0; width: 25%; height: 8%; background: #d05a7e; z-index: 1; }
+    .portada .franja3 { position: absolute; bottom: 0; left: 0; width: 10%; height: 18%; background: #d05a7e; z-index: 1; }
+    .portada .franja4 { position: absolute; bottom: 0; right: 0; width: 15%; height: 12%; background: #e8755c; z-index: 1; }
+    .portada-content { position: relative; z-index: 2; padding: 40px; }
+    .portada .campus { color: rgba(255,255,255,0.7); font-size: 13px; letter-spacing: 4px; font-weight: 700; margin-bottom: 40px; }
+    .portada h1 { color: #fff; font-size: 48px; font-weight: 900; line-height: 1.2; margin-bottom: 8px; text-shadow: 3px 3px 12px rgba(0,0,0,0.2); }
+    .portada h1 span { display: block; font-size: 32px; font-weight: 600; }
+    .portada .tema-label { color: rgba(255,255,255,0.85); font-size: 18px; margin-top: 50px; }
+    .portada .tema { color: #fff; font-size: 28px; font-weight: 700; margin-top: 8px; }
+    .portada .instituto { color: rgba(255,255,255,0.75); font-size: 15px; margin-top: 50px; }
+    .portada .fecha { color: rgba(255,255,255,0.55); font-size: 13px; margin-top: 10px; }
+    h3 { color: #3d5a96; font-size: 22px; margin-bottom: 20px; }
+    h4 { color: #3d5a96; font-size: 18px; margin-bottom: 12px; }
+    .block { background: #fdf4f0; border-left: 5px solid #e8755c; padding: 18px 20px; border-radius: 0 10px 10px 0; margin: 15px 0; }
+    .block-title { font-weight: 700; color: #e8755c; margin-bottom: 6px; }
+    .block-blue { background: #eff2f8; border-left: 5px solid #3d5a96; }
+    .block-blue .block-title { color: #3d5a96; }
+    .block-pink { background: #fdf0f4; border-left: 5px solid #d05a7e; }
+    .block-pink .block-title { color: #d05a7e; }
+    .block-vino { background: #fdf0f2; border-left: 5px solid #691b31; }
+    .block-vino .block-title { color: #691b31; }
+    ul, ol { padding-left: 22px; line-height: 2; }
+    li { margin-bottom: 4px; }
+    .columns { display: flex; gap: 30px; }
+    .columns > div { flex: 1; }
+    table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+    th, td { border: 1px solid #ddd; padding: 10px 14px; text-align: left; }
+    th { background: #3d5a96; color: #fff; }
+    tr:nth-child(even) { background: #f8f9fc; }
+    .tag { display: inline-block; background: #3d5a96; color: #fff; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; margin-right: 6px; }
+    .center { text-align: center; }
+    .final { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 400px; text-align: center; }
+    .final h2 { color: #3d5a96; font-size: 32px; margin-bottom: 20px; }
+    .final p { color: #666; font-size: 18px; }
+    .nav-bar { max-width: 1024px; margin: 10px auto; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+    .nav-bar button { background: #3d5a96; color: #fff; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 13px; transition: all 0.2s; }
+    .nav-bar button:hover { background: #e8755c; transform: translateY(-2px); }
+    .nav-bar button.activo { background: #d05a7e; }
+    .nav-controls { max-width: 1024px; margin: 10px auto; display: flex; gap: 10px; justify-content: center; }
+    .nav-controls button { background: #3d5a96; color: #fff; border: none; padding: 10px 28px; border-radius: 25px; cursor: pointer; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 15px; transition: all 0.2s; }
+    .nav-controls button:hover { background: #e8755c; transform: scale(1.05); }
+    .counter { max-width: 1024px; margin: 5px auto; text-align: center; font-size: 13px; color: #888; }
+    @media (max-width: 768px) {
+        .portada h1 { font-size: 32px; }
+        .portada h1 span { font-size: 24px; }
+        .portada .tema { font-size: 20px; }
+        .columns { flex-direction: column; }
+        .slide-body { padding: 20px; }
+        .slide-header h2 { font-size: 16px; }
+    }
+
+</style>
+</head>
+<body>
+
+<div class="nav-controls">
+    <button onclick="ant()">&#9664; Anterior</button>
+    <button onclick="sig()">Siguiente &#9654;</button>
+</div>
+<div class="counter" id="counter"></div>
+
+<div id="slides-container"></div>
+
+<script>
+const PORTADA = {
+    "etiqueta": "Tema 3.4 — Unidad 3",
+    "tema": "Revisión de cambios,<br>pruebas y publicación<br>responsable",
+    "instituto": "Instituto de Capacitación para el Trabajo del Estado de Hidalgo"
+};
+const slides = [
+    {
+        "tipo": "portada"
+    },
+    {
+        "titulo": "Índice",
+        "num": "2 / 31",
+        "body": "<div class=\"columns\"><div><strong style=\"color:#3d5a96;\">1. Revisar</strong><br>- El diff<br>- Leer cambios<br>- Pruebas<br>- Evidencia<br><br><strong style=\"color:#3d5a96;\">2. Publicar</strong><br>- Servicios<br>- Pasos<br>- Checklists</div><div><strong style=\"color:#3d5a96;\">3. Proteger</strong><br>- Privacidad<br>- Cuotas<br>- Qué no delegar<br><br><strong style=\"color:#3d5a96;\">4. Mantener</strong><br>- Actualizar<br>- Respaldo<br>- Si algo falla<br><br><strong style=\"color:#3d5a96;\">5. Cerrar</strong><br>- Actividad y resumen</div></div>"
+    },
+    {
+        "titulo": "Objetivo de aprendizaje",
+        "num": "3 / 31",
+        "body": "<p style=\"font-size:17px;line-height:1.7;margin-bottom:12px;\">Al terminar podrás <strong>revisar los cambios, probar el resultado y publicarlo de forma responsable</strong>.</p><div class=\"block\"><div class=\"block-title\">Lo que sabrás hacer</div><ul style=\"font-size:16px;line-height:2.1;\"><li>Leer un diff e identificar riesgos.</li><li>Ejecutar pruebas automáticas y manuales.</li><li>Publicar con una lista de verificación.</li><li>Mantener y actualizar el proyecto.</li></ul></div>"
+    },
+    {
+        "titulo": "Por qué revisar",
+        "num": "4 / 31",
+        "body": "<p style=\"font-size:17px;line-height:1.7;margin-bottom:12px;\">Codex puede equivocarse. La revisión es lo que separa un borrador de un entregable.</p><div class=\"columns\"><div><div class=\"block block-pink\"><div class=\"block-title\">Riesgos</div><ul style=\"font-size:16px;line-height:2.1;\"><li>Romper lo que servía.</li><li>Publicar un precio mal.</li><li>Exponer datos.</li><li>Perder trabajo.</li></ul></div></div><div><div class=\"block block-blue\"><div class=\"block-title\">Controles</div><ul style=\"font-size:16px;line-height:2.1;\"><li>Diff.</li><li>Pruebas.</li><li>Review.</li><li>Respaldo.</li></ul></div></div></div>"
+    },
+    {
+        "titulo": "El diff",
+        "num": "5 / 31",
+        "body": "<p style=\"font-size:17px;line-height:1.7;margin-bottom:12px;\">El diff muestra <strong>qué archivo cambió</strong>, qué líneas se agregaron y cuáles se eliminaron.</p><ul style=\"font-size:16px;line-height:2.1;\"><li>Verde o +: contenido nuevo.</li><li>Rojo o -: contenido eliminado.</li><li>Se puede comentar una línea.</li><li>Puedes abrirlo en tu editor.</li></ul>"
+    },
+    {
+        "titulo": "Leer un diff",
+        "num": "6 / 31",
+        "body": "<ol style=\"font-size:16px;line-height:2.1;\"><li>¿Qué archivo cambió?</li><li>¿Qué se agregó?</li><li>¿Se eliminó algo que funcionaba?</li><li>¿El cambio está en el lugar correcto?</li><li>¿Se entiende el cambio sin leer código?</li></ol><div class=\"block block-pink\"><div class=\"block-title\">Regla</div>Si no entiendes un cambio, pide una explicación antes de aceptar.</div>"
+    },
+    {
+        "titulo": "Pruebas",
+        "num": "7 / 31",
+        "body": "<p style=\"font-size:17px;line-height:1.7;margin-bottom:12px;\">Una prueba comprueba que algo hace lo que debería. Puede ser automática o manual.</p><ul style=\"font-size:16px;line-height:2.1;\"><li>Automática: el agente ejecuta comandos y pruebas.</li><li>Manual: tú abres la página y haces clic.</li><li>Ambas son necesarias.</li><li>Pide el resultado, no solo la afirmación.</li></ul>"
+    },
+    {
+        "titulo": "Tipos de prueba",
+        "num": "8 / 31",
+        "body": "<table style=\"font-size:14px;\"><tr><th>Tipo</th><th>Qué comprueba</th><th>Ejemplo</th></tr><tr><td>Funcional</td><td>Que haga lo pedido</td><td>Suma correcta</td></tr><tr><td>Límite</td><td>Casos extremos</td><td>Cantidad cero</td></tr><tr><td>Regresión</td><td>Que no rompió lo anterior</td><td>Botón que ya servía</td></tr><tr><td>Visual</td><td>Que se vea bien</td><td>Celular y escritorio</td></tr><tr><td>Contenido</td><td>Textos y datos</td><td>Precios vigentes</td></tr></table>"
+    },
+    {
+        "titulo": "Evidencia",
+        "num": "9 / 31",
+        "body": "<p style=\"font-size:17px;line-height:1.7;margin-bottom:12px;\">Pide evidencia concreta: qué comando ejecutó y qué resultado obtuvo.</p><ul style=\"font-size:16px;line-height:2.1;\"><li>Registro de terminal.</li><li>Resultado de pruebas.</li><li>Archivos modificados.</li><li>Supuestos usados.</li></ul><div class=\"block block-blue\"><div class=\"block-title\">Para qué</div>Puedes reconstruir qué pasó si algo falla.</div>"
+    },
+    {
+        "titulo": "Revisión con /review",
+        "num": "10 / 31",
+        "body": "<p style=\"font-size:17px;line-height:1.7;margin-bottom:12px;\">El comando /review pide una revisión enfocada antes de integrar.</p><div class=\"block block-vino\"><div class=\"block-title\">Ejemplo</div>«/review Revisa que el formulario no permita enviar campos vacíos y que los datos no se pierdan al recargar».</div><p style=\"font-size:15px;line-height:1.7;margin-bottom:12px;\">Devuelve hallazgos priorizados; tú decides qué corregir.</p>"
+    },
+    {
+        "titulo": "Publicar",
+        "num": "11 / 31",
+        "body": "<p style=\"font-size:17px;line-height:1.7;margin-bottom:12px;\">Publicar es poner los archivos en un servicio que los entrega con un enlace.</p><ul style=\"font-size:16px;line-height:2.1;\"><li>Netlify: sitios estáticos, arrastrar carpeta.</li><li>Vercel: sitios y apps modernas.</li><li>GitHub Pages: desde un repositorio.</li><li>Cloudflare Pages: rápido, con dominio.</li></ul>"
+    },
+    {
+        "titulo": "Pasos de publicación",
+        "num": "12 / 31",
+        "body": "<ol style=\"font-size:16px;line-height:2.1;\"><li>Confirma la versión probada.</li><li>Prepara el paquete.</li><li>Crea la cuenta tú.</li><li>Sube los archivos.</li><li>Prueba el enlace en otro dispositivo.</li><li>Documenta URL, fecha y versión.</li></ol>"
+    },
+    {
+        "titulo": "Checklist antes de publicar",
+        "num": "13 / 31",
+        "body": "<ul style=\"font-size:16px;line-height:2.1;\"><li>La app abre sin errores.</li><li>Los cálculos coinciden.</li><li>Se ve bien en celular.</li><li>No hay datos personales.</li><li>Existe respaldo.</li><li>Es la versión que probaste.</li></ul>"
+    },
+    {
+        "titulo": "Checklist después de publicar",
+        "num": "14 / 31",
+        "body": "<ul style=\"font-size:16px;line-height:2.1;\"><li>El enlace funciona en incógnito.</li><li>Funciona en el teléfono.</li><li>Otra persona pudo usarlo.</li><li>El enlace está en el lugar correcto.</li><li>Guardaste la URL y la fecha.</li></ul>"
+    },
+    {
+        "titulo": "Datos y privacidad",
+        "num": "15 / 31",
+        "body": "<div class=\"block block-vino\"><div class=\"block-title\">Regla</div>Todo lo que esté en el proyecto puede leerse. No incluyas lo que no necesitas.</div><ul style=\"font-size:16px;line-height:2.1;\"><li>Sin contraseñas ni claves.</li><li>Sin datos de clientes en ejemplos.</li><li>Revisa las políticas del servicio.</li><li>Elimina carpetas temporales.</li></ul>"
+    },
+    {
+        "titulo": "Cuotas",
+        "num": "16 / 31",
+        "body": "<p style=\"font-size:17px;line-height:1.7;margin-bottom:12px;\">El uso está incluido en los planes, con créditos opcionales.</p><ul style=\"font-size:16px;line-height:2.1;\"><li>Agrupa tareas relacionadas.</li><li>Pide borradores antes del entregable.</li><li>Revisa el consumo en tu cuenta.</li><li>Evita agentes sin supervisión.</li><li>Cancela lo que no uses.</li></ul>"
+    },
+    {
+        "titulo": "Qué no delegar",
+        "num": "17 / 31",
+        "body": "<table style=\"font-size:14px;\"><tr><th>Situación</th><th>Agente</th><th>Persona</th></tr><tr><td>Precios</td><td>Calcular</td><td>Decidir</td></tr><tr><td>Datos de clientes</td><td>No procesar</td><td>Proteger</td></tr><tr><td>Pagos</td><td>Preparar</td><td>Autorizar</td></tr><tr><td>Legal o fiscal</td><td>Organizar</td><td>Validar</td></tr><tr><td>Publicar</td><td>Preparar</td><td>Revisar y publicar</td></tr></table>"
+    },
+    {
+        "titulo": "Seguridad",
+        "num": "18 / 31",
+        "body": "<ul style=\"font-size:16px;line-height:2.1;\"><li>No instales plugins dudosos.</li><li>Revisa los permisos que piden.</li><li>Desconfía de páginas que piden datos.</li><li>Mantén actualizada la app.</li><li>Revisa el resumen de acciones.</li></ul><div class=\"block block-pink\"><div class=\"block-title\">Señal de alerta</div>Un permiso que no tiene relación con la tarea.</div>"
+    },
+    {
+        "titulo": "Mantenimiento",
+        "num": "19 / 31",
+        "body": "<ul style=\"font-size:16px;line-height:2.1;\"><li>Respalda antes de cambiar.</li><li>Agrupa mejoras en una tarea semanal.</li><li>Revisa enlaces y formularios al mes.</li><li>Actualiza precios desde una sola fuente.</li><li>Documenta cada cambio.</li></ul>"
+    },
+    {
+        "titulo": "Qué hacer si falla",
+        "num": "20 / 31",
+        "body": "<table style=\"font-size:14px;\"><tr><th>Problema</th><th>Causa</th><th>Solución</th></tr><tr><td>La app dejó de funcionar</td><td>Un cambio rompió algo</td><td>Revertir y corregir</td></tr><tr><td>Prueba fallida</td><td>Dependencia o lógica</td><td>Pedir detalle y corregir</td></tr><tr><td>Otro proyecto modificado</td><td>Carpeta equivocada</td><td>Restaurar respaldo</td></tr><tr><td>Tarea detenida</td><td>Cuota o conexión</td><td>Revisar y continuar</td></tr><tr><td>Resultado distinto</td><td>Encargo ambiguo</td><td>Precisar límites</td></tr></table>"
+    },
+    {
+        "titulo": "Caso: precio mal publicado",
+        "num": "21 / 31",
+        "body": "<div class=\"block block-vino\"><div class=\"block-title\">Situación</div>Se publicó la página con el precio de un producto desactualizado.</div><div class=\"block block-blue\"><div class=\"block-title\">Qué hacer</div>Corregir la fuente, volver a generar y probar. Avisar al cliente si ya vio el precio.</div><div class=\"block block-pink\"><div class=\"block-title\">Prevención</div>Revisar precios antes de publicar y usar una sola fuente de datos.</div>"
+    },
+    {
+        "titulo": "Caso: botón roto",
+        "num": "22 / 31",
+        "body": "<div class=\"block block-vino\"><div class=\"block-title\">Situación</div>El botón de WhatsApp funcionaba en computadora pero no en celular.</div><div class=\"block block-blue\"><div class=\"block-title\">Qué hacer</div>Probar en el teléfono, corregir el enlace y volver a publicar.</div><div class=\"block block-pink\"><div class=\"block-title\">Aprendizaje</div>La prueba móvil es obligatoria.</div>"
+    },
+    {
+        "titulo": "Actividad",
+        "num": "23 / 31",
+        "body": "<p style=\"font-size:17px;line-height:1.7;margin-bottom:12px;\"><strong>Meta:</strong> revisar y publicar un proyecto con evidencia.</p><ol style=\"font-size:16px;line-height:2.1;\"><li>Lee el diff del último cambio.</li><li>Ejecuta una prueba automática y dos manuales.</li><li>Usa /review con un enfoque.</li><li>Verifica privacidad.</li><li>Publica y guarda la ficha.</li></ol><div class=\"block block-blue\"><div class=\"block-title\">Entregable</div>Enlace publicado, informe de pruebas y ficha de publicación.</div>"
+    },
+    {
+        "titulo": "Rúbrica",
+        "num": "24 / 31",
+        "body": "<table style=\"font-size:14px;\"><tr><th>Criterio</th><th>Peso</th><th>Qué se observa</th></tr><tr><td>Lectura del diff</td><td>25%</td><td>Identifica cambios y riesgos</td></tr><tr><td>Pruebas</td><td>30%</td><td>Automática y manuales</td></tr><tr><td>Publicación</td><td>25%</td><td>Enlace funcional</td></tr><tr><td>Documentación</td><td>20%</td><td>Ficha y evidencia</td></tr></table>"
+    },
+    {
+        "titulo": "Resumen",
+        "num": "25 / 31",
+        "body": "<ul style=\"font-size:17px;line-height:2.1;\"><li>Revisar es parte del trabajo.</li><li>El diff muestra qué cambió.</li><li>Las pruebas automáticas y manuales se complementan.</li><li>Publicar exige checklist y respaldo.</li><li>La responsabilidad final es humana.</li></ul><div class=\"block center\" style=\"margin-top:15px;\"><div class=\"block-title\">Frase final</div><em>Lo que no se revisa, se publica con errores.</em></div>"
+    },
+    {
+        "titulo": "Autoevaluación",
+        "num": "26 / 31",
+        "body": "<ol style=\"font-size:17px;line-height:2.1;\"><li>¿Qué tres preguntas te ayudan a leer un diff?</li><li>¿Qué diferencia hay entre prueba automática y manual?</li><li>¿Para qué sirve /review?</li><li>¿Qué revisas antes de publicar?</li><li>¿Quién debe tener las credenciales?</li></ol>"
+    },
+    {
+        "titulo": "Glosario",
+        "num": "27 / 31",
+        "body": "<table style=\"font-size:14px;\"><tr><th>Término</th><th>Significado</th></tr><tr><td>Diff</td><td>Cambios entre versiones.</td></tr><tr><td>Regresión</td><td>Error en algo que ya funcionaba.</td></tr><tr><td>Review</td><td>Revisión enfocada antes de integrar.</td></tr><tr><td>Publicar</td><td>Poner el proyecto en un enlace.</td></tr><tr><td>Respaldo</td><td>Copia de seguridad.</td></tr></table>"
+    },
+    {
+        "titulo": "Recursos",
+        "num": "28 / 31",
+        "body": "<div class=\"block block-blue\"><div class=\"block-title\">Documentación</div><ul style=\"font-size:16px;line-height:2.1;\"><li>developers.openai.com/codex</li><li>Permisos y sandbox</li><li>Prompting y revisión</li><li>Publicación en servicios gratuitos</li></ul></div>"
+    },
+    {
+        "titulo": "Consejos",
+        "num": "29 / 31",
+        "body": "<ul style=\"font-size:16px;line-height:2.1;\"><li>Revisa con calma, no con prisa.</li><li>Prueba en el celular siempre.</li><li>Guarda una copia antes de publicar.</li><li>Documenta lo que cambió y quién aprobó.</li><li>Corrige rápido si algo falla.</li></ul>"
+    },
+    {
+        "titulo": "Cierre",
+        "num": "30 / 31",
+        "body": "<div class=\"block block-vino\"><div class=\"block-title\">Idea para llevarte</div>Publicar no es el final: es el inicio del mantenimiento.</div><p style=\"font-size:16px;line-height:1.7;margin-bottom:12px;\">En la siguiente unidad aprenderás a convertir estas tareas en skills y agentes reutilizables.</p>"
+    },
+    {
+        "titulo": "Gracias por su atención",
+        "num": "31 / 31",
+        "body": "<div class=\"final\">\n            <h2>¿Dudas o comentarios?</h2>\n            <p>Participa en el foro del tema</p>\n            <p style=\"margin-top:30px;color:#3d5a96;font-weight:700;\">ICATHI 4.0 — Inteligencia Artificial para tu Negocio</p>\n        </div>"
+    }
+];
+
+let actual = 0;
+
+function renderSlide(i) {
+    const s = slides[i];
+    const c = document.getElementById('slides-container');
+    if (s.tipo === 'portada') {
+        c.innerHTML = '<div class="slide portada">' +
+            '<div class="portada-bg"></div>' +
+            '<div class="franja1"></div><div class="franja2"></div><div class="franja3"></div><div class="franja4"></div>' +
+            '<div class="portada-content">' +
+            '<div class="campus">CAMPUS VIRTUAL</div>' +
+            '<h1>Inteligencia Artificial<span>para tu Negocio</span></h1>' +
+            '<div class="tema-label">' + PORTADA.etiqueta + '</div>' +
+            '<div class="tema">' + PORTADA.tema + '</div>' +
+            '<div class="instituto">' + PORTADA.instituto + '</div>' +
+            '<div class="fecha">2026</div>' +
+            '</div></div>';
+    } else {
+        c.innerHTML = '<div class="slide">' +
+            '<div class="slide-header"><h2>' + s.titulo + '</h2><span class="num">' + s.num + '</span></div>' +
+            '<div class="slide-body">' + s.body + '</div>' +
+            '<div class="slide-footer"><span>ICATHI 4.0</span><span>' + s.num + '</span></div>' +
+            '</div>';
+    }
+    document.getElementById('counter').textContent = 'Diapositiva ' + (i + 1) + ' de ' + slides.length;
+    document.querySelectorAll('.nav-bar button').forEach((b, idx) => {
+        b.classList.toggle('activo', idx === i);
+    });
+}
+
+function sig() {
+    if (actual < slides.length - 1) { actual++; renderSlide(actual); }
+}
+function ant() {
+    if (actual > 0) { actual--; renderSlide(actual); }
+}
+
+// Nav bar
+document.addEventListener('DOMContentLoaded', () => {
+    const nav = document.createElement('div');
+    nav.className = 'nav-bar';
+    slides.forEach((_, i) => {
+        const b = document.createElement('button');
+        b.textContent = i + 1;
+        b.onclick = () => { actual = i; renderSlide(i); };
+        nav.appendChild(b);
+    });
+    document.body.insertBefore(nav, document.querySelector('.nav-controls'));
+    renderSlide(0);
+});
+</script>
+
+</body>
+</html>
